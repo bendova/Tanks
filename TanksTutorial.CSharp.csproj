@@ -83,7 +83,9 @@
     <Compile Include="Assets\Complete\Scripts\Tank\TankShooting.cs" />
     <Compile Include="Assets\Complete\Scripts\UI\UIDirectionControl.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
+    <Compile Include="Assets\Scripts\Player\ShellController.cs" />
     <Compile Include="Assets\Scripts\Player\TankController.cs" />
+    <Compile Include="Assets\Scripts\Tags.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\Bowlby_One\OFL.txt" />
