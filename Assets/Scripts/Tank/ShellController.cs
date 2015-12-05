@@ -4,6 +4,7 @@ using System.Collections;
 public class ShellController : MonoBehaviour
 {
     public float m_LaunchSpeed = 10.0f;
+    public float m_Damage = 50.0f;
     public GameObject m_Launcher;
     public GameObject m_Explosion;
 
@@ -74,30 +75,16 @@ public class ShellController : MonoBehaviour
             {
                 DestroyTank(other.gameObject);
             }
-            SpawnExplosion(m_Explosion);
-            Destroy(gameObject);
+            Utils.DestroyWithExplosion(gameObject, m_Explosion);
         }
     }
 
     private void DestroyTank(GameObject tank)
     {
-        TankController controller = tank.GetComponent<TankController>();
-        SpawnExplosion(controller.m_Explosion);
-        Destroy(tank);
-    }
-
-    private void SpawnExplosion(GameObject explosionPrefab)
-    {
-        GameObject explosion = GameObject.Instantiate(explosionPrefab, transform.position, Quaternion.identity) as GameObject;
-        float destroyTime = 1f;
-        if (explosion)
+        HitPoints hitPoints = tank.GetComponent<HitPoints>();
+        if (hitPoints)
         {
-            ParticleSystem particles = explosion.GetComponent<ParticleSystem>();
-            if (particles)
-            {
-                destroyTime = particles.duration;
-            }
+            hitPoints.TakeDamage(m_Damage);
         }
-        Destroy(explosion, destroyTime);
     }
 }

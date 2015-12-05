@@ -3,13 +3,21 @@ using System.Collections;
 
 public class TankController : MonoBehaviour
 {
+    public enum PlayerIndex
+    {
+        None = 0,
+        Player_01 = 1,
+        Player_02 = 2,
+    }
+
     public float m_MoveSpeedFactor = 0.2f;
     public float m_ProjectileAccMin = 5.0f;
     public float m_ProjectileAccMax = 20.0f;
     public float m_ShotPowerUpFactor = 1.0f;
+    public PlayerIndex m_PlayerIndex = PlayerIndex.None;
     public Transform m_ShellSpawner;
     public GameObject m_Projectile;
-    public GameObject m_Explosion;
+    public GameObject m_LaunchFlash;
 
     private float m_ProjectileAcc = 0;
     private float m_TimeSincePowerup = 0;
@@ -23,8 +31,8 @@ public class TankController : MonoBehaviour
     
     private void UpdateMovement()
     {
-        float hInput = Input.GetAxis("Horizontal1");
-        float vInput = Input.GetAxis("Vertical1");
+        float hInput = GetAxis("Horizontal");
+        float vInput = GetAxis("Vertical");
         
         Vector3 forwardDirection = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
         transform.position = transform.position + forwardDirection * vInput * m_MoveSpeedFactor;
@@ -33,14 +41,14 @@ public class TankController : MonoBehaviour
 
     private void UpdateFiring()
     {
-        m_IsPoweringUp = m_IsPoweringUp || Input.GetButtonDown("Fire1");
+        m_IsPoweringUp = m_IsPoweringUp || GetButtonDown("Fire");
         if (m_IsPoweringUp)
         {
             m_ProjectileAcc = Mathf.Lerp(m_ProjectileAccMin, m_ProjectileAccMax, m_TimeSincePowerup);
             m_TimeSincePowerup += m_ShotPowerUpFactor * Time.deltaTime;
         }
 
-        bool fireUp = Input.GetButtonUp("Fire1");
+        bool fireUp = GetButtonUp("Fire");
         if (fireUp)
         {
             FireProjectile(m_ProjectileAcc);
@@ -55,6 +63,7 @@ public class TankController : MonoBehaviour
         GameObject projectile = GameObject.Instantiate(m_Projectile, m_ShellSpawner.position, m_ShellSpawner.rotation) as GameObject;
         if (projectile)
         {
+            GameObject.Instantiate(m_LaunchFlash, m_ShellSpawner.position, m_ShellSpawner.rotation);
             ShellController controller = projectile.GetComponent<ShellController>();
             if (controller)
             {
@@ -62,5 +71,25 @@ public class TankController : MonoBehaviour
                 controller.m_LaunchSpeed = projectileAcc;
             }
         }
+    }
+
+    private float GetAxis(string axis)
+    {
+        return Input.GetAxis(GetInputName(axis));
+    }
+
+    private bool GetButtonDown(string button)
+    {
+        return Input.GetButtonDown(GetInputName(button));
+    }
+
+    private bool GetButtonUp(string button)
+    {
+        return Input.GetButtonUp(GetInputName(button));
+    }
+
+    private string GetInputName(string input)
+    {
+        return input + (int) m_PlayerIndex;
     }
 }
