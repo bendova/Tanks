@@ -5,8 +5,8 @@ public class ShellController : MonoBehaviour
 {
     public float m_LaunchSpeed = 10.0f;
     public float m_Damage = 50.0f;
-    public GameObject m_Launcher;
     public GameObject m_Explosion;
+    [HideInInspector] public GameObject m_Launcher;
 
     private Rigidbody m_RigidBody;
     private Vector3 m_ForwardDirection;
