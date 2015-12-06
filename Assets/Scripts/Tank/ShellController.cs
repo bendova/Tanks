@@ -32,38 +32,48 @@ public class ShellController : MonoBehaviour
         m_SinLaunchAngle = Mathf.Sin(m_LaunchAngle);
 	}
 
-    void Update()
+    void FixedUpdate()
     {
         m_TimeSinceLaunch += Time.fixedDeltaTime;
-        Vector2 parabolicPos = GetProjectilePosition(m_TimeSinceLaunch);
+        Vector2 parabolicPos = GetParabolicPosition(m_TimeSinceLaunch);
         UpdatePosition(parabolicPos);
         UpdateOrientation(parabolicPos);
     }
 
     private void UpdatePosition(Vector2 parabolicPos)
     {
+        transform.position = GetWorldPositionFromParabolicPos(parabolicPos);
+    }
+
+    private Vector3 GetWorldPositionFromParabolicPos(Vector2 parabolicPos)
+    {
         Vector3 nextPos = m_ForwardDirection * parabolicPos.x + Vector3.up * parabolicPos.y;
-        transform.position = m_LaunchPosition + nextPos;
+        return m_LaunchPosition + nextPos;
     }
 
     private void UpdateOrientation(Vector2 parabolicPos)
     {
-        Vector2 nextParabolicPos = GetProjectilePosition(m_TimeSinceLaunch + Time.fixedDeltaTime);
+        Vector2 nextParabolicPos = GetParabolicPosition(m_TimeSinceLaunch + Time.fixedDeltaTime);
         Vector3 nextOrientation = m_ForwardDirection * (nextParabolicPos.x - parabolicPos.x) +
             Vector3.up * (nextParabolicPos.y - parabolicPos.y);
-        float angle = Vector3.Angle(m_ForwardDirection, nextOrientation) * Mathf.Deg2Rad;
-        if (nextOrientation.y < 0)
-        {
-            angle = -angle;
-        }
+
+        DrawDebugLine(parabolicPos, nextParabolicPos);
+
         Quaternion newRotation = Quaternion.FromToRotation(m_ForwardDirection, nextOrientation);
         transform.rotation = newRotation * m_InitialRotation;
     }
 
-    private Vector2 GetProjectilePosition(float timeSinceLaunch)
+    private void DrawDebugLine(Vector3 parabolicPos, Vector3 nextParabolicPos)
+    {
+        Vector3 lineStart = GetWorldPositionFromParabolicPos(parabolicPos);
+        Vector3 lineEnd = GetWorldPositionFromParabolicPos(nextParabolicPos);
+        Debug.DrawLine(lineStart, lineEnd, Color.red, 5.0f);
+    }
+
+    private Vector2 GetParabolicPosition(float timeSinceLaunch)
     {
         float x = m_LaunchSpeed * m_CosLaunchAngle * timeSinceLaunch;
-        float y = m_LaunchSpeed * m_SinLaunchAngle * timeSinceLaunch - (Physics.gravity.magnitude * m_TimeSinceLaunch * timeSinceLaunch) / 2;
+        float y = m_LaunchSpeed * m_SinLaunchAngle * timeSinceLaunch - (Physics.gravity.magnitude * timeSinceLaunch * timeSinceLaunch) / 2;
         return new Vector2(x, y);
     }
 

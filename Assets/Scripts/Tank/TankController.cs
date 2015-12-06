@@ -12,16 +12,16 @@ public class TankController : MonoBehaviour
 
     public float m_MoveSpeedFactor = 0.2f;
     public float m_ProjectileAccMin = 5.0f;
-    public float m_ProjectileAccMax = 20.0f;
-    public float m_ShotPowerUpFactor = 1.0f;
-    public float m_FireRate = 1.0f; // projectiles per second
-    public int m_ShellsCount = 5;
+    public float m_ProjectileAccMax = 30.0f;
+    public float m_ShotPowerUpFactor = 2.0f;
+    public float m_FireRate = 2.0f; // projectiles per second
+    public int m_ShellsCount = 100;
     public PlayerIndex m_PlayerIndex = PlayerIndex.None;
     public Transform m_ShellSpawner;
     public GameObject m_Projectile;
     public GameObject m_LaunchFlash;
     public Slider m_ReloadSlider;
-    public GameObject m_PowerUpGameObject;
+    public GameObject m_PowerUp;
 
     private Slider m_PowerUpSlider;
     private float m_ProjectileAcc = 0f;
@@ -36,18 +36,26 @@ public class TankController : MonoBehaviour
             m_ReloadSlider.enabled = true;
             m_ReloadSlider.value = 1f;
         }
-        if (m_PowerUpGameObject)
+        if (m_PowerUp)
         {
-            m_PowerUpGameObject.SetActive(false);
-            m_PowerUpSlider = m_PowerUpGameObject.GetComponent<Slider>();
+            m_PowerUp.SetActive(false);
+            m_PowerUpSlider = m_PowerUp.GetComponent<Slider>();
             m_PowerUpSlider.value = 0f;
         }
     }
 
-	void Update()
+    public void AddAmmo(int ammo)
+    {
+        m_ShellsCount += ammo;
+    }
+
+    void Update()
 	{
-	    UpdateMovement();
-        UpdateFiring();
+        if (m_PlayerIndex != PlayerIndex.None)
+        {
+            UpdateMovement();
+            UpdateFiring();
+        }
     }
     
     private void UpdateMovement()
@@ -76,7 +84,7 @@ public class TankController : MonoBehaviour
             if (m_IsPoweringUp && fireUp)
             {
                 FireProjectile(m_ProjectileAcc);
-                m_PowerUpGameObject.SetActive(false);
+                m_PowerUp.SetActive(false);
                 m_IsPoweringUp = false;
                 m_ProjectileAcc = 0f;
                 m_TimeSincePowerup = 0f;
@@ -93,9 +101,9 @@ public class TankController : MonoBehaviour
 
     private void UpdatePowerUpSlider()
     {
-        if (m_PowerUpGameObject)
+        if (m_PowerUp)
         {
-            m_PowerUpGameObject.SetActive(true);
+            m_PowerUp.SetActive(true);
             m_PowerUpSlider.value = m_ProjectileAcc / (m_ProjectileAccMax - m_ProjectileAccMin);
         }
     }
