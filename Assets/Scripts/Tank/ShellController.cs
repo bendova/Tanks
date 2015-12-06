@@ -32,9 +32,9 @@ public class ShellController : MonoBehaviour
         m_SinLaunchAngle = Mathf.Sin(m_LaunchAngle);
 	}
 
-    void FixedUpdate()
+    void Update()
     {
-        m_TimeSinceLaunch += Time.fixedDeltaTime;
+        m_TimeSinceLaunch += Time.deltaTime;
         Vector2 parabolicPos = GetParabolicPosition(m_TimeSinceLaunch);
         UpdatePosition(parabolicPos);
         UpdateOrientation(parabolicPos);
@@ -53,7 +53,7 @@ public class ShellController : MonoBehaviour
 
     private void UpdateOrientation(Vector2 parabolicPos)
     {
-        Vector2 nextParabolicPos = GetParabolicPosition(m_TimeSinceLaunch + Time.fixedDeltaTime);
+        Vector2 nextParabolicPos = GetParabolicPosition(m_TimeSinceLaunch + Time.deltaTime);
         Vector3 nextOrientation = m_ForwardDirection * (nextParabolicPos.x - parabolicPos.x) +
             Vector3.up * (nextParabolicPos.y - parabolicPos.y);
 

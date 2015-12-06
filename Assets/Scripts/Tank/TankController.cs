@@ -22,6 +22,8 @@ public class TankController : MonoBehaviour
     public GameObject m_LaunchFlash;
     public Slider m_ReloadSlider;
     public GameObject m_PowerUp;
+    public Text m_Ammo;
+    public SpriteRenderer m_PlayerIndicator;
 
     private Slider m_PowerUpSlider;
     private float m_ProjectileAcc = 0f;
@@ -42,11 +44,22 @@ public class TankController : MonoBehaviour
             m_PowerUpSlider = m_PowerUp.GetComponent<Slider>();
             m_PowerUpSlider.value = 0f;
         }
+        UpdateAmmoText();
+
+        if (m_PlayerIndex == PlayerIndex.Player_01)
+        {
+            m_PlayerIndicator.color = Color.blue;
+        }
+        else if (m_PlayerIndex == PlayerIndex.Player_02)
+        {
+            m_PlayerIndicator.color = Color.red;
+        }
     }
 
     public void AddAmmo(int ammo)
     {
         m_ShellsCount += ammo;
+        UpdateAmmoText();
     }
 
     void Update()
@@ -90,6 +103,7 @@ public class TankController : MonoBehaviour
                 m_TimeSincePowerup = 0f;
                 m_ReloadTime = 1 / m_FireRate;
                 --m_ShellsCount;
+                UpdateAmmoText();
             }
         }
         else
@@ -98,21 +112,7 @@ public class TankController : MonoBehaviour
         }
         UpdateReloadSlider();
     }
-
-    private void UpdatePowerUpSlider()
-    {
-        if (m_PowerUp)
-        {
-            m_PowerUp.SetActive(true);
-            m_PowerUpSlider.value = m_ProjectileAcc / (m_ProjectileAccMax - m_ProjectileAccMin);
-        }
-    }
-
-    private void UpdateReloadSlider()
-    {
-        m_ReloadSlider.value = (1f - m_ReloadTime*m_FireRate);
-    }
-
+    
     private void FireProjectile(float projectileAcc)
     {
         GameObject projectile = GameObject.Instantiate(m_Projectile, m_ShellSpawner.position, m_ShellSpawner.rotation) as GameObject;
@@ -126,6 +126,25 @@ public class TankController : MonoBehaviour
                 controller.m_LaunchSpeed = projectileAcc;
             }
         }
+    }
+
+    private void UpdatePowerUpSlider()
+    {
+        if (m_PowerUp)
+        {
+            m_PowerUp.SetActive(true);
+            m_PowerUpSlider.value = m_ProjectileAcc / (m_ProjectileAccMax - m_ProjectileAccMin);
+        }
+    }
+
+    private void UpdateReloadSlider()
+    {
+        m_ReloadSlider.value = (1f - m_ReloadTime * m_FireRate);
+    }
+
+    private void UpdateAmmoText()
+    {
+        m_Ammo.text = "Shells: " + m_ShellsCount;
     }
 
     private float GetAxis(string axis)

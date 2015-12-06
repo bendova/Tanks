@@ -18,6 +18,16 @@ public class HitPoints : MonoBehaviour
         }
     }
 
+    public void AddHitPoints(float ammount)
+    {
+        m_HitPoints += ammount;
+        if (m_HitPoints > m_MaxHitPoints)
+        {
+            m_MaxHitPoints = m_HitPoints;
+        }
+        UpdateLifeBar();
+    }
+
     public void TakeDamage(float amount)
     {
         m_HitPoints -= amount;

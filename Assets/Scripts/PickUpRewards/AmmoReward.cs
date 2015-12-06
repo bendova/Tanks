@@ -14,6 +14,7 @@ public class AmmoReward : MonoBehaviour
             {
                 tankController.AddAmmo(m_Ammount);
             }
+            RewardSpawningManager.Instance.OnRewardPickedUp();
             Destroy(gameObject);
         }
     }
