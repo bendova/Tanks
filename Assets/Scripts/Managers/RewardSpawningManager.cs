@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class RewardSpawningManager: MonoBehaviour
+public class RewardSpawningManager: Singleton<RewardSpawningManager>
 {
     public GameObject[] m_Rewards;
     public GameObject m_SpawnPointsContainer;
@@ -10,18 +10,8 @@ public class RewardSpawningManager: MonoBehaviour
     private float m_TimeSinceLastSpawn = 0f;
     private int m_SpawnedRewards = 0;
 
-    private static RewardSpawningManager s_Instance = null;
-    public static RewardSpawningManager Instance
-    {
-        get
-        {
-            return s_Instance;
-        }
-    }
-
     void Start()
     {
-        s_Instance = this;
     }
 
     void Update()
@@ -45,7 +35,8 @@ public class RewardSpawningManager: MonoBehaviour
             GameObject reward = m_Rewards[Random.Range(0, m_Rewards.Length)];
             int spawnPointIndex = Random.Range(0, m_SpawnPointsContainer.transform.childCount);
             GameObject spawnPoint = m_SpawnPointsContainer.transform.GetChild(spawnPointIndex).gameObject;
-            GameObject.Instantiate(reward, spawnPoint.transform.position, reward.transform.rotation);
+            GameObject spawnedReward = GameObject.Instantiate(reward, spawnPoint.transform.position, reward.transform.rotation) as GameObject;
+            spawnedReward.transform.parent = gameObject.transform;
         }
     }
 

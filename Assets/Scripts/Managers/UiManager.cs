@@ -5,16 +5,6 @@ public class UiManager : Singleton<UiManager>
 {
     public Text[] m_PlayerScoreTexts;
     
-    void Start()
-    {
-	
-	}
-	
-	void Update()
-    {
-	
-	}
-
     public void SetScore(TankController.PlayerIndex playerIndex, int score)
     {
         switch (playerIndex)
