@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 
 public class HitPoints : MonoBehaviour
@@ -18,23 +17,36 @@ public class HitPoints : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+    }
+
+    public bool CanAddHitPoints()
+    {
+        return (m_HitPoints < m_MaxHitPoints);
+    }
+
     public void AddHitPoints(float ammount)
     {
         m_HitPoints += ammount;
         if (m_HitPoints > m_MaxHitPoints)
         {
-            m_MaxHitPoints = m_HitPoints;
+            m_HitPoints = m_MaxHitPoints;
         }
         UpdateLifeBar();
     }
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, GameObject attacker)
     {
         m_HitPoints -= amount;
         if (m_HitPoints <= 0)
         {
             m_HitPoints = 0;
             Utils.DestroyWithExplosion(gameObject, m_Explosion);
+            if (gameObject.tag == Tags.Tank)
+            {
+                GameManager.Instance.OnTankDestroyed(gameObject, attacker);
+            }
         }
         UpdateLifeBar();
     }

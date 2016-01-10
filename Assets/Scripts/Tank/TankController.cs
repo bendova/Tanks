@@ -48,11 +48,11 @@ public class TankController : MonoBehaviour
 
         if (m_PlayerIndex == PlayerIndex.Player_01)
         {
-            m_PlayerIndicator.color = Color.blue;
+            m_PlayerIndicator.color = Color.red;
         }
         else if (m_PlayerIndex == PlayerIndex.Player_02)
         {
-            m_PlayerIndicator.color = Color.red;
+            m_PlayerIndicator.color = Color.blue;
         }
     }
 

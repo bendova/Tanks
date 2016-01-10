@@ -83,18 +83,18 @@ public class ShellController : MonoBehaviour
         {
             if (other.gameObject.tag == Tags.Tank)
             {
-                DestroyTank(other.gameObject);
+                AttackTank(other.gameObject);
             }
             Utils.DestroyWithExplosion(gameObject, m_Explosion);
         }
     }
 
-    private void DestroyTank(GameObject tank)
+    private void AttackTank(GameObject tank)
     {
         HitPoints hitPoints = tank.GetComponent<HitPoints>();
         if (hitPoints)
         {
-            hitPoints.TakeDamage(m_Damage);
+            hitPoints.TakeDamage(m_Damage, m_Launcher);
         }
     }
 }

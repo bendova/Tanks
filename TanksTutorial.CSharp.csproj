@@ -85,6 +85,13 @@
     <Compile Include="Assets\Scripts\AutoDestroy.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
     <Compile Include="Assets\Scripts\HitPoints.cs" />
+    <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\RewardSpawningManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\UiManager.cs" />
+    <Compile Include="Assets\Scripts\PersistentSingleton.cs" />
+    <Compile Include="Assets\Scripts\PickUpRewards\AmmoReward.cs" />
+    <Compile Include="Assets\Scripts\PickUpRewards\HitPointsReward.cs" />
+    <Compile Include="Assets\Scripts\Singleton.cs" />
     <Compile Include="Assets\Scripts\Tags.cs" />
     <Compile Include="Assets\Scripts\Tank\ShellController.cs" />
     <Compile Include="Assets\Scripts\Tank\TankController.cs" />

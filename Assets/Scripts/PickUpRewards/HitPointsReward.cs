@@ -9,12 +9,12 @@ public class HitPointsReward : MonoBehaviour
         if (other.gameObject.tag == Tags.Tank)
         {
             HitPoints hitPoints = other.gameObject.GetComponent<HitPoints>();
-            if (hitPoints)
+            if (hitPoints && hitPoints.CanAddHitPoints())
             {
                 hitPoints.AddHitPoints(m_HitPointsReward);
+                RewardSpawningManager.Instance.OnRewardPickedUp();
+                Destroy(gameObject);
             }
-            RewardSpawningManager.Instance.OnRewardPickedUp();
-            Destroy(gameObject);
         }
     }
 }
