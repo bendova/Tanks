@@ -22,12 +22,13 @@ public class TankController : MonoBehaviour
     public GameObject m_LaunchFlash;
     public Slider m_ReloadSlider;
     public GameObject m_PowerUp;
+    public GameObject m_Turret;
     public Text m_Ammo;
     public SpriteRenderer m_PlayerIndicator;
 
     private Slider m_PowerUpSlider;
     private float m_ProjectileAcc = 0f;
-    private float m_TimeSincePowerup = 0f;
+    private float m_PowerUpTime = 0f;
     private bool m_IsPoweringUp = false;
     private float m_ReloadTime = 0f;
 
@@ -67,6 +68,7 @@ public class TankController : MonoBehaviour
         if (m_PlayerIndex != PlayerIndex.None)
         {
             UpdateMovement();
+            UpdateTurret();
             UpdateFiring();
         }
     }
@@ -81,26 +83,35 @@ public class TankController : MonoBehaviour
         transform.Rotate(Vector3.up, hInput, Space.World);
     }
 
+    private void UpdateTurret()
+    {
+        float hInput = GetAxis("HorizontalRight");
+        float vInput = GetAxis("VerticalRight");
+
+        m_Turret.transform.Rotate(Vector3.up, hInput, Space.World);
+    }
+
     private void UpdateFiring()
     {
         if ((m_ReloadTime <= 0) && (m_ShellsCount > 0))
-        { 
-            m_IsPoweringUp = m_IsPoweringUp || GetButtonDown("Fire");
+        {
+            bool isFiring = GetAxis("Fire") < -0.1f;
+            m_IsPoweringUp = m_IsPoweringUp || isFiring;
             if (m_IsPoweringUp)
             {
-                m_ProjectileAcc = Mathf.Lerp(m_ProjectileAccMin, m_ProjectileAccMax, m_TimeSincePowerup);
-                m_TimeSincePowerup += m_ShotPowerUpFactor * Time.deltaTime;
+                m_PowerUpTime += m_ShotPowerUpFactor * Time.deltaTime;
+                m_ProjectileAcc = Mathf.Lerp(m_ProjectileAccMin, m_ProjectileAccMax, m_PowerUpTime);
                 UpdatePowerUpSlider();
             }
 
-            bool fireUp = GetButtonUp("Fire");
+            bool fireUp = !isFiring;
             if (m_IsPoweringUp && fireUp)
             {
                 FireProjectile(m_ProjectileAcc);
                 m_PowerUp.SetActive(false);
                 m_IsPoweringUp = false;
                 m_ProjectileAcc = 0f;
-                m_TimeSincePowerup = 0f;
+                m_PowerUpTime = 0f;
                 m_ReloadTime = 1 / m_FireRate;
                 --m_ShellsCount;
                 UpdateAmmoText();

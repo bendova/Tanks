@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerScore
@@ -53,13 +54,19 @@ public class GameManager: PersistentSingleton<GameManager>
             IsTankPlayer(attackerController))
         {
             m_PlayerScore[attackerController.m_PlayerIndex].IncScore();
-            Application.LoadLevel(Application.loadedLevel);
+            StartCoroutine("ReloadLevel");
         }
     }
 
     private bool IsTankPlayer(TankController controller)
     {
         return (controller && (controller.m_PlayerIndex != TankController.PlayerIndex.None));
+    }
+
+    private IEnumerator ReloadLevel()
+    {
+        yield return new WaitForSeconds(3f);
+        Application.LoadLevel(Application.loadedLevel);
     }
 
     public void OnLevelWasLoaded(int level)
