@@ -80,7 +80,7 @@ public class TankController : MonoBehaviour
         
         Vector3 forwardDirection = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
         transform.position = transform.position + forwardDirection * vInput * m_MoveSpeedFactor;
-        transform.Rotate(Vector3.up, hInput, Space.World);
+        transform.Rotate(Vector3.up, hInput, Space.Self);
     }
 
     private void UpdateTurret()
@@ -88,15 +88,14 @@ public class TankController : MonoBehaviour
         float hInput = GetAxis("HorizontalRight");
         float vInput = GetAxis("VerticalRight");
 
-        m_Turret.transform.Rotate(Vector3.up, hInput, Space.World);
+        m_Turret.transform.Rotate(Vector3.up, hInput, Space.Self);
     }
 
     private void UpdateFiring()
     {
         if ((m_ReloadTime <= 0) && (m_ShellsCount > 0))
-        {
-            bool isFiring = GetAxis("Fire") < -0.1f;
-            m_IsPoweringUp = m_IsPoweringUp || isFiring;
+        { 
+            m_IsPoweringUp = m_IsPoweringUp || GetButtonDown("Fire");
             if (m_IsPoweringUp)
             {
                 m_PowerUpTime += m_ShotPowerUpFactor * Time.deltaTime;
@@ -104,7 +103,7 @@ public class TankController : MonoBehaviour
                 UpdatePowerUpSlider();
             }
 
-            bool fireUp = !isFiring;
+            bool fireUp = GetButtonUp("Fire");
             if (m_IsPoweringUp && fireUp)
             {
                 FireProjectile(m_ProjectileAcc);

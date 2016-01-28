@@ -5,10 +5,10 @@ using System.Collections;
 public class CameraController : MonoBehaviour
 {
     public Transform[] m_Targets;
-    public float m_OffsetY = 1f;
+    public float m_OffsetY = 0.9f;
     public float m_MinOffsetX = -10.0f;
     public float m_MinY = 10.0f;
-    public float m_MaxY = 60.0f;
+    public float m_MaxY = 70.0f;
 
 	void LateUpdate()
 	{
