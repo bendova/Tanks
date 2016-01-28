@@ -164,6 +164,7 @@
     <Compile Include="Assets\RAIN\Editor\ScriptTemplates\DecisionTemplate_CS.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\BhvTrees\PatrolAggressive.xml" />
     <None Include="Assets\Fonts\Bowlby_One\OFL.txt" />
     <None Include="Assets\RAIN\Editor\ScriptTemplates\BehaviorTreeTemplate.xml" />
     <None Include="Assets\RAIN\Editor\Shaders\AspectRingShader.shader" />

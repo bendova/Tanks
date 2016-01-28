@@ -80,6 +80,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AI\Actions\Attack.cs" />
     <Compile Include="Assets\AI\Actions\LookAtTarget.cs" />
     <Compile Include="Assets\Complete\Scripts\Camera\CameraControl.cs" />
     <Compile Include="Assets\Complete\Scripts\Managers\GameManager.cs" />
@@ -103,9 +104,11 @@
     <Compile Include="Assets\Scripts\Tags.cs" />
     <Compile Include="Assets\Scripts\Tank\ShellController.cs" />
     <Compile Include="Assets\Scripts\Tank\TankController.cs" />
+    <Compile Include="Assets\Scripts\Tank\TurretController.cs" />
     <Compile Include="Assets\Scripts\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\BhvTrees\PatrolAggressive.xml" />
     <None Include="Assets\Fonts\Bowlby_One\OFL.txt" />
     <None Include="Assets\RAIN\Editor\ScriptTemplates\BehaviorTreeTemplate.xml" />
     <None Include="Assets\RAIN\Editor\Shaders\AspectRingShader.shader" />

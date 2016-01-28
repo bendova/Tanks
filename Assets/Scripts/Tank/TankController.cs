@@ -14,12 +14,9 @@ public class TankController : MonoBehaviour
     public float m_ProjectileAccMin = 5.0f;
     public float m_ProjectileAccMax = 30.0f;
     public float m_ShotPowerUpFactor = 2.0f;
-    public float m_FireRate = 2.0f; // projectiles per second
-    public int m_ShellsCount = 100;
+
     public PlayerIndex m_PlayerIndex = PlayerIndex.None;
-    public Transform m_ShellSpawner;
-    public GameObject m_Projectile;
-    public GameObject m_LaunchFlash;
+    public TurretController m_TurretController;
     public Slider m_ReloadSlider;
     public GameObject m_PowerUp;
     public GameObject m_Turret;
@@ -30,7 +27,6 @@ public class TankController : MonoBehaviour
     private float m_ProjectileAcc = 0f;
     private float m_PowerUpTime = 0f;
     private bool m_IsPoweringUp = false;
-    private float m_ReloadTime = 0f;
 
     void Start()
     {
@@ -59,7 +55,7 @@ public class TankController : MonoBehaviour
 
     public void AddAmmo(int ammo)
     {
-        m_ShellsCount += ammo;
+        m_TurretController.AddAmmo(ammo);
         UpdateAmmoText();
     }
 
@@ -93,7 +89,7 @@ public class TankController : MonoBehaviour
 
     private void UpdateFiring()
     {
-        if ((m_ReloadTime <= 0) && (m_ShellsCount > 0))
+        if (m_TurretController.CanFire())
         { 
             m_IsPoweringUp = m_IsPoweringUp || GetButtonDown("Fire");
             if (m_IsPoweringUp)
@@ -106,36 +102,15 @@ public class TankController : MonoBehaviour
             bool fireUp = GetButtonUp("Fire");
             if (m_IsPoweringUp && fireUp)
             {
-                FireProjectile(m_ProjectileAcc);
+                m_TurretController.FireProjectile(m_ProjectileAcc);
                 m_PowerUp.SetActive(false);
                 m_IsPoweringUp = false;
                 m_ProjectileAcc = 0f;
                 m_PowerUpTime = 0f;
-                m_ReloadTime = 1 / m_FireRate;
-                --m_ShellsCount;
                 UpdateAmmoText();
             }
         }
-        else
-        {
-            m_ReloadTime -= Time.deltaTime;
-        }
         UpdateReloadSlider();
-    }
-    
-    private void FireProjectile(float projectileAcc)
-    {
-        GameObject projectile = GameObject.Instantiate(m_Projectile, m_ShellSpawner.position, m_ShellSpawner.rotation) as GameObject;
-        if (projectile)
-        {
-            GameObject.Instantiate(m_LaunchFlash, m_ShellSpawner.position, m_ShellSpawner.rotation);
-            ShellController controller = projectile.GetComponent<ShellController>();
-            if (controller)
-            {
-                controller.m_Launcher = gameObject;
-                controller.m_LaunchSpeed = projectileAcc;
-            }
-        }
     }
 
     private void UpdatePowerUpSlider()
@@ -149,12 +124,12 @@ public class TankController : MonoBehaviour
 
     private void UpdateReloadSlider()
     {
-        m_ReloadSlider.value = (1f - m_ReloadTime * m_FireRate);
+        m_ReloadSlider.value = m_TurretController.GetReloadFactor();
     }
 
     private void UpdateAmmoText()
     {
-        m_Ammo.text = "Shells: " + m_ShellsCount;
+        m_Ammo.text = "Shells: " + m_TurretController.m_ShellsCount;
     }
 
     private float GetAxis(string axis)
