@@ -9,10 +9,10 @@ public class AmmoReward : MonoBehaviour
     {
         if (other.gameObject.tag == Tags.Tank)
         {
-            TankController tankController = other.gameObject.GetComponent<TankController>();
-            if (tankController)
+            TurretController turretController = other.gameObject.GetComponent<TurretController>();
+            if (turretController)
             {
-                tankController.AddAmmo(m_Ammount);
+                turretController.AddAmmo(m_Ammount);
             }
             RewardSpawningManager.Instance.OnRewardPickedUp();
             Destroy(gameObject);
