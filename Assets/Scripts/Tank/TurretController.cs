@@ -16,7 +16,8 @@ public class TurretController : MonoBehaviour
     private float m_ReloadTime = 0f;
 
     private GameObject m_Turret;
-    public GameObject Turret {
+    public GameObject Turret
+    {
         get { return m_Turret; }
     }
 
