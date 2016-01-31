@@ -24,13 +24,15 @@ public class Attack : RAINAction
 
     public override ActionResult Execute(RAIN.Core.AI ai)
     {
+        ActionResult result = ActionResult.FAILURE;
         GameObject target = Target.Evaluate<GameObject>(ai.DeltaTime, ai.WorkingMemory);
         if (IsTargetInSights(ai, target) && m_TurretController.CanFire())
         {
             m_TurretController.FireProjectile(target.transform.position);
+            result = ActionResult.SUCCESS;
         }
 
-        return ActionResult.SUCCESS;
+        return result;
     }
 
     private bool IsTargetInSights(RAIN.Core.AI ai, GameObject target)
@@ -38,7 +40,7 @@ public class Attack : RAINAction
         bool isInSights = false;
         RaycastHit hit;
         Transform turret = m_Turret.transform;
-        if (Physics.Raycast(turret.position, turret.forward, out hit))
+        if (Physics.Raycast(ai.Body.transform.position, turret.forward, out hit))
         {
             isInSights = (hit.transform.gameObject == target);
         }

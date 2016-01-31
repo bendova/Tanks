@@ -51,11 +51,17 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Advertisements">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Analytics">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
@@ -81,8 +87,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AI\Actions\Attack.cs" />
+    <Compile Include="Assets\AI\Actions\CheckAmmoStock.cs" />
     <Compile Include="Assets\AI\Actions\KeepTargetInRange.cs" />
     <Compile Include="Assets\AI\Actions\LookAtTarget.cs" />
+    <Compile Include="Assets\AI\Actions\NeedsAmmo.cs" />
+    <Compile Include="Assets\AI\Actions\NeedsTankParts.cs" />
+    <Compile Include="Assets\AI\Actions\PriorityExecutor.cs" />
     <Compile Include="Assets\Complete\Scripts\Camera\CameraControl.cs" />
     <Compile Include="Assets\Complete\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Complete\Scripts\Managers\TankManager.cs" />
