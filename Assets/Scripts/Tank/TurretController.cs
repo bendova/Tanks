@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using UnityEngine.Networking;
 
 public class TurretController : MonoBehaviour
 {
@@ -14,6 +15,19 @@ public class TurretController : MonoBehaviour
     public float m_FireRate = 2.0f; // projectiles per second
     private float m_ReloadTime = 0f;
 
+    private GameObject m_Turret;
+    public GameObject Turret {
+        get { return m_Turret; }
+    }
+
+    private bool m_IsTurningTurret = false;
+    private float m_TurnAngleRadiansDelta = 0.1f;
+
+    public void Start()
+    {
+        m_Turret = m_ShellSpawner.transform.parent.gameObject;
+    }
+
     public void AddAmmo(int ammo)
     {
         m_ShellsCount += ammo;
@@ -24,6 +38,16 @@ public class TurretController : MonoBehaviour
         if (m_ReloadTime > 0)
         {
             m_ReloadTime -= Time.deltaTime;
+        }
+        if (m_IsTurningTurret)
+        {
+            Vector3 forward = m_Turret.transform.parent.transform.forward;
+            m_Turret.transform.forward = Vector3.RotateTowards(m_Turret.transform.forward, forward, m_TurnAngleRadiansDelta, 0.0f);
+            float angleDegress = Vector3.Angle(m_Turret.transform.forward, forward);
+            if (Mathf.Approximately(angleDegress, 0.0f))
+            {
+                m_IsTurningTurret = false;
+            }
         }
     }
 
@@ -75,5 +99,22 @@ public class TurretController : MonoBehaviour
             }
         }
         return controller;
+    }
+
+    public void TurnTurretForward()
+    {
+        m_IsTurningTurret = true;
+    }
+
+    public void TurnTurret(float angle)
+    {
+        m_IsTurningTurret = false;
+        m_Turret.transform.Rotate(Vector3.up, angle, Space.Self);
+    }
+
+    public void TurretLookAt(Vector3 targetPos)
+    {
+        m_IsTurningTurret = false;
+        m_Turret.transform.LookAt(targetPos);
     }
 }

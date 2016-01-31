@@ -15,14 +15,12 @@ public class KeepTargetInRange : RAINAction
     public Expression Range;
 
     private TurretController m_TurretController;
-    private GameObject m_Turret;
 
     public override void Start(RAIN.Core.AI ai)
     {
         base.Start(ai);
         actionName = "KeepTargetInRange";
         m_TurretController = ai.Body.GetComponent<TurretController>();
-        m_Turret = m_TurretController.m_ShellSpawner.transform.parent.gameObject;
     }
 
     public override ActionResult Execute(RAIN.Core.AI ai)
@@ -40,12 +38,12 @@ public class KeepTargetInRange : RAINAction
             dirToTarget *= range/dirToTarget.magnitude;
             ai.Motor.Speed = speed;
             ai.Motor.MoveTo(ai.Body.transform.position + dirToTarget);
-            m_Turret.transform.transform.forward = ai.Body.transform.forward;
+            m_TurretController.TurnTurretForward();
         }
         else
         {
-            targetPos.y = m_Turret.transform.position.y;
-            m_Turret.transform.LookAt(targetPos);
+            targetPos.y = m_TurretController.Turret.transform.position.y;
+            m_TurretController.TurretLookAt(targetPos);
         }
 
         return ActionResult.SUCCESS;
