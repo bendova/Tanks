@@ -49,10 +49,6 @@ public class KeepTargetInRange : RAINAction
         return ActionResult.SUCCESS;
     }
 
-    private bool IsInRange(RAIN.Core.AI ai, Vector3 targetPos, float range)
-    {
-        return (Vector3.Distance(ai.Body.transform.position, targetPos) < range);
-    }
 
     public override void Stop(RAIN.Core.AI ai)
     {

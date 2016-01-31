@@ -10,11 +10,12 @@ public class LookAround : RAINAction
     private TurretController m_TurretController;
     private GameObject m_Turret;
 
-    private float m_Angle = 0.0f;
+    private float m_Angle;
 
     public override void Start(RAIN.Core.AI ai)
     {
         base.Start(ai);
+        m_Angle = 0.0f;
         m_TurretController = ai.Body.GetComponent<TurretController>();
         m_Turret = m_TurretController.m_ShellSpawner.transform.parent.gameObject;
     }
@@ -25,13 +26,9 @@ public class LookAround : RAINAction
         if (m_Angle < 360f)
         {
             isDone = ActionResult.RUNNING;
-            float angleInc = ai.DeltaTime * 20.0f;
+            float angleInc = ai.DeltaTime * 40.0f;
             m_TurretController.TurnTurret(angleInc);
             m_Angle += angleInc;
-        }
-        else
-        {
-            m_TurretController.TurnTurretForward();
         }
         return isDone;
     }

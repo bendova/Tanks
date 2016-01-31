@@ -84,7 +84,10 @@ public class TankController : MonoBehaviour
     {
         float hInput = GetAxis("HorizontalRight");
 
-        m_TurretController.TurnTurret(hInput * m_TurretRotateFactor);
+        if (hInput != 0.0f)
+        {
+            m_TurretController.TurnTurret(hInput * m_TurretRotateFactor);
+        }
     }
 
     private void UpdateFiring()
