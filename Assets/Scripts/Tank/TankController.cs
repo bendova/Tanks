@@ -11,6 +11,8 @@ public class TankController : MonoBehaviour
     }
 
     public float m_MoveSpeedFactor = 0.2f;
+    public float m_TurnSpeedFactor = 2f;
+    public float m_TurretRotateFactor = 4f;
     public float m_ProjectileAccMin = 5.0f;
     public float m_ProjectileAccMax = 30.0f;
     public float m_ShotPowerUpFactor = 2.0f;
@@ -19,7 +21,6 @@ public class TankController : MonoBehaviour
     public TurretController m_TurretController;
     public Slider m_ReloadSlider;
     public GameObject m_PowerUp;
-    public GameObject m_Turret;
     public Text m_Ammo;
     public SpriteRenderer m_PlayerIndicator;
 
@@ -76,15 +77,14 @@ public class TankController : MonoBehaviour
         
         Vector3 forwardDirection = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
         transform.position = transform.position + forwardDirection * vInput * m_MoveSpeedFactor;
-        transform.Rotate(Vector3.up, hInput, Space.Self);
+        transform.Rotate(Vector3.up, hInput * m_TurnSpeedFactor, Space.Self);
     }
 
     private void UpdateTurret()
     {
         float hInput = GetAxis("HorizontalRight");
-        float vInput = GetAxis("VerticalRight");
 
-        m_Turret.transform.Rotate(Vector3.up, hInput, Space.Self);
+        m_TurretController.TurnTurret(hInput * m_TurretRotateFactor);
     }
 
     private void UpdateFiring()
